@@ -107,13 +107,53 @@ namespace Snake
 				Console.ForegroundColor = ConsoleColor.DarkGray;
 				Console.Write("*");
 			}
+			Position createObject(Position posObject, ConsoleColor color)
+			{
+				do
+				{
+					posObject = new Position(randomNumbersGenerator.Next(1, Console.WindowHeight),
+						randomNumbersGenerator.Next(0, Console.WindowWidth));
+				}
+				while (snakeElements.Contains(posObject) || obstacles.Contains(posObject));
+				Console.SetCursorPosition(posObject.col, posObject.row);
+				Console.ForegroundColor = color;
+				return posObject;
+			}
+			void end(string output, int userPoints)
+			{
+				string gameover = output;
+				Console.SetCursorPosition((Console.WindowWidth - gameover.Length) / 2, (Console.WindowHeight / 2) - 4);
+				Console.ForegroundColor = ConsoleColor.Red;
+				Console.WriteLine(gameover);
 
-			
-			
-		
-			
-			
-			
+
+
+				string statuspoint = "Your points are {0}";
+				Console.SetCursorPosition((Console.WindowWidth - statuspoint.Length) / 2, (Console.WindowHeight / 2) - 3);
+				Console.ForegroundColor = ConsoleColor.Red;
+				Console.WriteLine(statuspoint, userPoints);
+				//Asks the user for name then the name and score will be stored in a text file
+				string enternamemsg = "Enter your name: ";
+				Console.SetCursorPosition((Console.WindowWidth - statuspoint.Length) / 2, (Console.WindowHeight / 2) - 2);
+				Console.Write(enternamemsg);
+				Console.ForegroundColor = ConsoleColor.Red;
+
+
+				string name = Console.ReadLine();
+				string LMsg = name + " " + userPoints + "\n";
+				File.AppendAllText("score.txt", LMsg);
+
+				string exit = "Press enter to exit";
+				Console.SetCursorPosition((Console.WindowWidth - exit.Length) / 2, (Console.WindowHeight / 2) - 1);
+				Console.WriteLine(exit);
+				Console.ReadLine();
+			}
+
+
+
+
+
+
 			while (true)
 			{
 				negativePoints++;
@@ -158,65 +198,14 @@ namespace Snake
 				userPoints = Math.Max(userPoints, 0);
 				if (snakeElements.Contains(snakeNewHead) || obstacles.Contains(snakeNewHead))
 				{
-					string gameover = "Game over!";
-					Console.SetCursorPosition((Console.WindowWidth - gameover.Length) / 2, (Console.WindowHeight / 2) - 4);
-					Console.ForegroundColor = ConsoleColor.Red;
-					Console.WriteLine(gameover);
-
-
-
-					string statuspoint = "Your points are {0}";	
-					Console.SetCursorPosition((Console.WindowWidth - statuspoint.Length) / 2, (Console.WindowHeight / 2)- 3);
-					Console.ForegroundColor = ConsoleColor.Red;
-					Console.WriteLine(statuspoint,userPoints);
-					//Asks the user for name then the name and score will be stored in a text file
-					string enternamemsg = "Enter your name: ";
-					Console.SetCursorPosition((Console.WindowWidth - statuspoint.Length) / 2, (Console.WindowHeight / 2) - 2);
-					Console.Write(enternamemsg);
-					Console.ForegroundColor = ConsoleColor.Red;
-
-
-					string name = Console.ReadLine();
-					string LMsg = name + " " + userPoints + "\n";
-					File.AppendAllText("score.txt", LMsg);
-
-					string exit = "Press enter to exit";
-					Console.SetCursorPosition((Console.WindowWidth -exit.Length) / 2, (Console.WindowHeight / 2) - 1);
-					Console.WriteLine(exit);
-					Console.ReadLine();
+					end("Game Over!", userPoints);
 					return;
 
 
 				//If the userPoints is more than 500, then the user wins	
 				}else if(userPoints > 500)
 				{
-
-					string gameover = "You win!";
-					Console.SetCursorPosition((Console.WindowWidth - gameover.Length) / 2, (Console.WindowHeight / 2) - 4);
-					Console.ForegroundColor = ConsoleColor.Red;
-					Console.WriteLine(gameover);
-
-
-
-					string statuspoint = "Your points are {0}";
-					Console.SetCursorPosition((Console.WindowWidth - statuspoint.Length) / 2, (Console.WindowHeight / 2) - 3);
-					Console.ForegroundColor = ConsoleColor.Red;
-					Console.WriteLine(statuspoint, userPoints);
-					//Asks the user for name then the name and score will be stored in a text file
-					string enternamemsg = "Enter your name: ";
-					Console.SetCursorPosition((Console.WindowWidth - statuspoint.Length) / 2, (Console.WindowHeight / 2) - 2);
-					Console.Write(enternamemsg);
-					Console.ForegroundColor = ConsoleColor.Red;
-
-
-					string name = Console.ReadLine();
-					string LMsg = name + " " + userPoints + "\n";
-					File.AppendAllText("score.txt", LMsg);
-
-					string exit = "Press enter to exit";
-					Console.SetCursorPosition((Console.WindowWidth - exit.Length) / 2, (Console.WindowHeight / 2) - 1);
-					Console.WriteLine(exit);
-					Console.ReadLine();
+					end("You Win!", userPoints);
 					return;
 				}
 
@@ -234,35 +223,15 @@ namespace Snake
 				//check snakehead overlapping food position
 				if (snakeNewHead.col == food.col && snakeNewHead.row == food.row)
 				{
-					
-					// feeding the snake
-					//create new food position object until position is not overlapping snake or obstacle
-					do
-					{
-						food = new Position(randomNumbersGenerator.Next(1, Console.WindowHeight),
-							randomNumbersGenerator.Next(0, Console.WindowWidth));
-					}
-					while (snakeElements.Contains(food) || obstacles.Contains(food));
-					//refresh last food eat time timer counter 
-					lastFoodTime = Environment.TickCount;
-					Console.SetCursorPosition(food.col, food.row);
-					Console.ForegroundColor = ConsoleColor.Yellow;
-					Console.Write("@");
-					sleepTime--;
+
 					//create new obstacle position object until no overlapping with snake and other obstacle
 					Position obstacle = new Position();
-					do
-					{
-						obstacle = new Position(randomNumbersGenerator.Next(1, Console.WindowHeight),
-							randomNumbersGenerator.Next(0, Console.WindowWidth));
-					}
-					while (snakeElements.Contains(obstacle) ||
-						obstacles.Contains(obstacle) ||
-						(food.row != obstacle.row && food.col != obstacle.row));
+					obstacle = createObject(obstacle, ConsoleColor.Cyan);
 					obstacles.Add(obstacle);
-					Console.SetCursorPosition(obstacle.col, obstacle.row);
-					Console.ForegroundColor = ConsoleColor.Cyan;
 					Console.Write("=");
+					// feeding the snake
+					//create new food position object until position is not overlapping snake or obstacle
+					food = createObject(food, ConsoleColor.Yellow);
 					//more point if super food
 					if (superFood == true)
 					{
@@ -276,6 +245,7 @@ namespace Snake
 					{
 						superFood = true;
 					}
+					sleepTime--;
 				}
 				else
 				{
@@ -295,12 +265,7 @@ namespace Snake
 					Console.SetCursorPosition(food.col, food.row);
 					Console.Write(" ");
 					//create new food position until no overlapping with obstacle and snake
-					do
-					{
-						food = new Position(randomNumbersGenerator.Next(1, Console.WindowHeight),
-							randomNumbersGenerator.Next(0, Console.WindowWidth));
-					}
-					while (snakeElements.Contains(food) || obstacles.Contains(food));
+					food= createObject(food, ConsoleColor.Yellow);
 					//refresh last food eat time timer counter 
 					lastFoodTime = Environment.TickCount;
 				}
