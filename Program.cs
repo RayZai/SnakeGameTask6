@@ -15,7 +15,7 @@ namespace Snake
 		public int col;
 		//Constructor for Position
 		public Position(int row, int col)
-		{
+		{	
 			this.row = row;
 			this.col = col;
 		}
@@ -32,6 +32,7 @@ namespace Snake
 			myPlayer.PlayLooping();
 
 			//Initializing variables
+			bool superFood = false;
 			byte right = 0;
 			byte left = 1;
 			byte down = 2;
@@ -262,6 +263,19 @@ namespace Snake
 					Console.SetCursorPosition(obstacle.col, obstacle.row);
 					Console.ForegroundColor = ConsoleColor.Cyan;
 					Console.Write("=");
+					//more point if super food
+					if (superFood == true)
+					{
+						negativePoints -= 200;
+						superFood = false;
+					}
+					//refresh last food eat time timer counter 
+					lastFoodTime = Environment.TickCount;
+					int randomNumber = randomNumbersGenerator.Next(0, 11);
+					if (randomNumber % 2 == 0)
+					{
+						superFood = true;
+					}
 				}
 				else
 				{
@@ -303,6 +317,14 @@ namespace Snake
 
 				Console.SetCursorPosition(food.col, food.row);
 				Console.ForegroundColor = ConsoleColor.Yellow;
+				if (superFood == true)
+				{
+					Console.Write("$");
+				}
+				else
+				{
+					Console.Write("@");
+				}
 				sleepTime -= 0.01;
 
 				Thread.Sleep((int)sleepTime);
