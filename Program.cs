@@ -5,8 +5,6 @@ using System.Text;
 using System.Collections;
 using System.Threading;
 using System.IO;
-
-//added new
 using System.ComponentModel.Design;
 using System.Runtime.CompilerServices;
 
