@@ -147,14 +147,14 @@ namespace Snake
 				{
 					
 
-					if (userInput.Key == ConsoleKey.Enter) //if direction isnt equal to right it will move left
+					if (userInput.Key == ConsoleKey.Enter) 
 					{
 						menu = false;
 						gameStart = true;
 						Console.Clear();
 					}
 
-					if (userInput.Key == ConsoleKey.Escape) //if direction isnt equal to right it will move left
+					if (userInput.Key == ConsoleKey.Escape) 
 					{
 
 						Console.Clear();
