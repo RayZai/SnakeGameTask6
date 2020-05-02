@@ -126,12 +126,46 @@ namespace Snake
 			}
 			void end(string output, int userPoints)
 			{
+				string fText = File.ReadAllText("score.txt");
+				string[] scoreArr = fText.Split(',', '\n');
+				string tempName, tempScore, tempDate;
+				for (int i = 1; i < scoreArr.Length - 1; i += 3)
+				{
+
+					for (int j = i + 3; j < scoreArr.Length; j += 3)
+					{
+						if (int.Parse(scoreArr[i]) < int.Parse(scoreArr[j]))
+						{
+							tempName = scoreArr[i - 1];
+							tempScore = scoreArr[i];
+							tempDate = scoreArr[i + 1];
+
+							scoreArr[i - 1] = scoreArr[j - 1];
+							scoreArr[i] = scoreArr[j];
+							scoreArr[i + 1] = scoreArr[j + 1];
+
+							scoreArr[j - 1] = tempName;
+							scoreArr[j] = tempScore;
+							scoreArr[j + 1] = tempDate;
+						}
+					}
+
+				}
+
+				string scoreboard = "Leaderboard";
+				Console.SetCursorPosition(Console.WindowWidth - scoreboard.Length - 7, 0);
+				Console.WriteLine(scoreboard);
+				for (int i = 0; i < 9; i += 3)
+				{
+					string score = (i / 3) + 1 + ". " + scoreArr[i] + " " + scoreArr[i + 1] + " " + scoreArr[i + 2];
+					Console.SetCursorPosition((Console.WindowWidth - score.Length), 1 + (i / 3));
+					Console.WriteLine(score);
+				}
+
 				string gameover = output;
 				Console.SetCursorPosition((Console.WindowWidth - gameover.Length) / 2, (Console.WindowHeight / 2) - 4);
 				Console.ForegroundColor = ConsoleColor.Red;
 				Console.WriteLine(gameover);
-
-
 
 				string statuspoint = "Your points are {0}";
 				Console.SetCursorPosition((Console.WindowWidth - statuspoint.Length) / 2, (Console.WindowHeight / 2) - 3);
@@ -143,11 +177,13 @@ namespace Snake
 				Console.Write(enternamemsg);
 				Console.ForegroundColor = ConsoleColor.Red;
 
-
+				string date = DateTime.Now.ToString("MM/dd/yyyy h:mm tt");
 				string name = Console.ReadLine();
-				string LMsg = name + " " + userPoints + "\n";
+				string LMsg = name + "," + userPoints + ","+ date+"\n";
 				File.AppendAllText("score.txt", LMsg);
 
+
+				
 				string exit = "Press enter to exit";
 				Console.SetCursorPosition((Console.WindowWidth - exit.Length) / 2, (Console.WindowHeight / 2) - 1);
 				Console.WriteLine(exit);
