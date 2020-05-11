@@ -327,6 +327,21 @@ namespace Snake
 					Console.SetCursorPosition(0, 0);
 					Console.ForegroundColor = ConsoleColor.White;
 					userPoints = Math.Max(userPoints, 0);
+					//game get harder when user reach certain point
+					if (userPoints > checkPoint)
+					{
+						checkPoint += 300;
+						sleepTime -= 20;
+						foodDissapearTime -= 2000;
+						if (foodDissapearTime <= 5000)
+						{
+							foodDissapearTime = 5000;
+						}
+						if (sleepTime <= 20)
+						{
+							sleepTime = 20;
+						}
+					}
 					//if snake overlap with obstacle or snake, game is over
 					if (snakeElements.Contains(snakeNewHead) || obstacles.Contains(snakeNewHead))
 					{
