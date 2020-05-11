@@ -41,7 +41,7 @@ namespace Snake
 			string option2 = "2.Press ESC to quit";
 			Console.SetCursorPosition((Console.WindowWidth - option1.Length) / 2, (Console.WindowHeight / 2) - 4);
 			Console.Write(option2);
-			string option3 = "3.Press SPACEBAR in game to pause and show options";
+			string option3 = "3.Press SPACEBAR in game to pause and show main menu";
 			Console.SetCursorPosition((Console.WindowWidth - option1.Length) / 2, (Console.WindowHeight / 2) - 3);
 			Console.Write(option3);
 			ConsoleKeyInfo userInput = Console.ReadKey();
