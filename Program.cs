@@ -30,16 +30,20 @@ namespace Snake
 		public static ConsoleKeyInfo mainMenu()
 		{
 			//Main menu for game
+			//Main menu for game
 			Console.ForegroundColor = ConsoleColor.Red;
 			string gamename = "********** SNAKE GAME **********";
-			Console.SetCursorPosition((Console.WindowWidth - gamename.Length) / 2, (Console.WindowHeight / 2) - 4);
+			Console.SetCursorPosition((Console.WindowWidth - gamename.Length) / 2, (Console.WindowHeight / 2) - 6);
 			Console.Write(gamename);
-			string option1 = "1.Press enter to start the game!";
-			Console.SetCursorPosition((Console.WindowWidth - option1.Length) / 2, (Console.WindowHeight / 2) - 3);
+			string option1 = "1.Press ENTER to start game / [restart game after pause]";
+			Console.SetCursorPosition((Console.WindowWidth - option1.Length) / 2, (Console.WindowHeight / 2) - 5);
 			Console.Write(option1);
 			string option2 = "2.Press ESC to quit";
-			Console.SetCursorPosition((Console.WindowWidth - option1.Length) / 2, (Console.WindowHeight / 2) - 2);
+			Console.SetCursorPosition((Console.WindowWidth - option1.Length) / 2, (Console.WindowHeight / 2) - 4);
 			Console.Write(option2);
+			string option3 = "3.Press SPACEBAR in game to pause and show options";
+			Console.SetCursorPosition((Console.WindowWidth - option1.Length) / 2, (Console.WindowHeight / 2) - 3);
+			Console.Write(option3);
 			ConsoleKeyInfo userInput = Console.ReadKey();
 			return userInput;
 
@@ -154,6 +158,22 @@ namespace Snake
 						Console.Clear();
 					}
 
+					
+					
+					if (userInput.Key == ConsoleKey.Spacebar)
+					{
+						menu = false;
+						gameStart = true;
+						Main(null);
+						Console.ReadLine();
+					}
+
+
+
+					
+					
+					
+					
 					if (userInput.Key == ConsoleKey.Escape) 
 					{
 
@@ -276,6 +296,18 @@ namespace Snake
 						{
 							if (direction != up) direction = down;
 						}
+						
+						
+						if (userInput.Key == ConsoleKey.Spacebar)
+						{
+						menu = false;
+						gameStart = true;
+						Main(null);
+						Console.ReadLine();
+						}
+
+
+						
 					}
 
 					Position snakeHead = snakeElements.Last();
