@@ -295,13 +295,11 @@ namespace Snake
 					Console.SetCursorPosition(0, 0);
 					Console.ForegroundColor = ConsoleColor.White;
 					userPoints = Math.Max(userPoints, 0);
+					//if snake overlap with obstacle or snake, game is over
 					if (snakeElements.Contains(snakeNewHead) || obstacles.Contains(snakeNewHead))
 					{
 						end("Game Over!", userPoints);
-						return;
-
-
-						//If the userPoints is more than 500, then the user wins	
+						return;	
 					}
 					
 					Console.SetCursorPosition(snakeHead.col, snakeHead.row);
