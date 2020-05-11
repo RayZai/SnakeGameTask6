@@ -181,7 +181,8 @@ namespace Snake
 				int lastFoodTime = 0;
 				int foodDissapearTime = 15000;
 				int negativePoints = 0;
-
+				int checkPoint=300;
+				
 				//A array of Position entities called directions
 				//defining the direction that the snake can move
 				Position[] directions = new Position[]
