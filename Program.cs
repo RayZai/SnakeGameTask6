@@ -302,10 +302,6 @@ namespace Snake
 
 
 						//If the userPoints is more than 500, then the user wins	
-					}else if (userPoints > 500)
-					{
-						end("You Win!", userPoints);
-						return;
 					}
 					
 					Console.SetCursorPosition(snakeHead.col, snakeHead.row);
