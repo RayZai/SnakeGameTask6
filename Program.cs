@@ -143,7 +143,6 @@ namespace Snake
 		static void Main(string[] args)
 		{
 			bool restart = true;
-			
 			bool menu = true;
 			bool gameStart = false;
 
