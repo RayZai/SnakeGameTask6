@@ -142,7 +142,7 @@ namespace Snake
 		}
 		static void Main(string[] args)
 		{
-			bool restart = true ;
+			bool restart = true;
 			bool menu = true ;
 			bool gameStart = false;
 			if (menu)
@@ -186,9 +186,10 @@ namespace Snake
 					break;
 				}
 			}
-			while(restart)
+			while (restart)
 			{
 				restart = false;
+
 				if (gameStart)
 				{
 
@@ -205,15 +206,16 @@ namespace Snake
 					int lastFoodTime = 0;
 					int foodDissapearTime = 15000;
 					int negativePoints = 0;
+					int checkPoint = 300;
 
 					//A array of Position entities called directions
 					//defining the direction that the snake can move
 					Position[] directions = new Position[]
 					{
-					new Position(0, 1), // right
-					new Position(0, -1), // left
-					new Position(1, 0), // down
-					new Position(-1, 0), // up
+						new Position(0, 1), // right
+						new Position(0, -1), // left
+						new Position(1, 0), // down
+						new Position(-1, 0), // up
 					};
 
 					double sleepTime = 100;
@@ -230,41 +232,6 @@ namespace Snake
 						obstacles.Add(new Position(randomNumbersGenerator.Next(1, Console.WindowHeight),
 									randomNumbersGenerator.Next(0, Console.WindowWidth)));
 					}
-				//Initializing variables
-				bool superFood = false;
-				byte right = 0;
-				byte left = 1;
-				byte down = 2;
-				byte up = 3;
-				int lastFoodTime = 0;
-				int foodDissapearTime = 15000;
-				int negativePoints = 0;
-				int checkPoint=300;
-				
-				//A array of Position entities called directions
-				//defining the direction that the snake can move
-				Position[] directions = new Position[]
-				{
-				new Position(0, 1), // right
-				new Position(0, -1), // left
-				new Position(1, 0), // down
-				new Position(-1, 0), // up
-				};
-
-				double sleepTime = 100;
-				int direction = right;
-				Random randomNumbersGenerator = new Random();
-				Console.BufferHeight = Console.WindowHeight;
-				lastFoodTime = Environment.TickCount;
-
-				//A list of Positions entity that contain the positions of the obstacle
-				List<Position> obstacles = new List<Position>();
-
-				for (int i = 0; i < 5; i++)
-				{
-					obstacles.Add(new Position(randomNumbersGenerator.Next(1, Console.WindowHeight),
-								randomNumbersGenerator.Next(0, Console.WindowWidth)));
-				}
 
 
 					//Displaying the obstacles
@@ -385,11 +352,26 @@ namespace Snake
 						Console.SetCursorPosition(0, 0);
 						Console.ForegroundColor = ConsoleColor.White;
 						userPoints = Math.Max(userPoints, 0);
+						//game get harder when user reach certain point
+						if (userPoints > checkPoint)
+						{
+							checkPoint += 300;
+							sleepTime -= 20;
+							foodDissapearTime -= 2000;
+							if (foodDissapearTime <= 5000)
+							{
+								foodDissapearTime = 5000;
+							}
+							if (sleepTime <= 20)
+							{
+								sleepTime = 20;
+							}
+						}
 						//if snake overlap with obstacle or snake, game is over
 						if (snakeElements.Contains(snakeNewHead) || obstacles.Contains(snakeNewHead))
 						{
 							end("Game Over!", userPoints);
-							return;	
+							return;
 						}
 
 						Console.SetCursorPosition(snakeHead.col, snakeHead.row);
@@ -458,72 +440,6 @@ namespace Snake
 
 						Console.SetCursorPosition(food.col, food.row);
 						Console.ForegroundColor = ConsoleColor.Yellow;
-						
-					}
-
-					Position snakeHead = snakeElements.Last();
-					Position nextDirection = directions[direction];
-
-					Position snakeNewHead = new Position(snakeHead.row + nextDirection.row,
-						snakeHead.col + nextDirection.col);
-
-					if (snakeNewHead.col < 0) snakeNewHead.col = Console.WindowWidth - 1;
-					if (snakeNewHead.row < 1) snakeNewHead.row = Console.WindowHeight - 1;
-					if (snakeNewHead.row >= Console.WindowHeight) snakeNewHead.row = 1;
-					if (snakeNewHead.col >= Console.WindowWidth) snakeNewHead.col = 0;
-
-					//Displaying the score
-					int userPoints = (snakeElements.Count - 6) * 100 - negativePoints;
-					//if (userPoints < 0) userPoints = 0;
-					Console.SetCursorPosition(0, 0);
-					Console.ForegroundColor = ConsoleColor.White;
-					userPoints = Math.Max(userPoints, 0);
-					//game get harder when user reach certain point
-					if (userPoints > checkPoint)
-					{
-						checkPoint += 300;
-						sleepTime -= 20;
-						foodDissapearTime -= 2000;
-						if (foodDissapearTime <= 5000)
-						{
-							foodDissapearTime = 5000;
-						}
-						if (sleepTime <= 20)
-						{
-							sleepTime = 20;
-						}
-					}
-					//if snake overlap with obstacle or snake, game is over
-					if (snakeElements.Contains(snakeNewHead) || obstacles.Contains(snakeNewHead))
-					{
-						end("Game Over!", userPoints);
-						return;	
-					}
-					
-					Console.SetCursorPosition(snakeHead.col, snakeHead.row);
-					Console.ForegroundColor = ConsoleColor.DarkGray;
-					Console.Write("*");
-
-					snakeElements.Enqueue(snakeNewHead);
-					Console.SetCursorPosition(snakeNewHead.col, snakeNewHead.row);
-					Console.ForegroundColor = ConsoleColor.Gray;
-					if (direction == right) Console.Write(">"); //direction for snake moving right 
-					if (direction == left) Console.Write("<");//direction for snake moving left and so forth
-					if (direction == up) Console.Write("^");
-					if (direction == down) Console.Write("v");
-					//check snakehead overlapping food position
-					if (snakeNewHead.col == food.col && snakeNewHead.row == food.row)
-					{
-
-						//create new obstacle position object until no overlapping with snake and other obstacle
-						Position obstacle = new Position();
-						obstacle = createObject(obstacle, ConsoleColor.Cyan);
-						obstacles.Add(obstacle);
-						Console.Write("=");
-						// feeding the snake
-						//create new food position object until position is not overlapping snake or obstacle
-						food = createObject(food, ConsoleColor.Yellow);
-						//more point if super food
 						if (superFood == true)
 						{
 							Console.Write("$");
